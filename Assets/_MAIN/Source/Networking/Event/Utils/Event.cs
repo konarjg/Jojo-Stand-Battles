@@ -1,32 +1,29 @@
-﻿using ExitGames.Client.Photon;
-using Photon.Pun;
-using Photon.Realtime;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Event
+namespace Jojo
 {
-    public int ID
+    public abstract class Event
     {
-        get
+        private byte ID;
+
+        public Event(byte ID)
         {
-            return Events.GetID(GetType());
+            this.ID = ID;
+        }
+
+        public byte GetID()
+        {
+            return ID;
+        }
+
+        public void Call(params object[] data)
+        {
+            var options = new RaiseEventOptions();
+            options.Receivers = ReceiverGroup.All;
+            PhotonNetwork.RaiseEvent(ID, data, true, options);
         }
     }
-
-    public Event()
-    {
-        Events.RegisterEvent(this);
-    }
-
-    public void Call()
-    {
-        var options = new RaiseEventOptions();
-        var sendOptions = new SendOptions();
-        PhotonNetwork.RaiseEvent((byte)Convert.ChangeType(ID, typeof(byte)), null, options, sendOptions);
-    }
-
-    public abstract void OnEvent();
 }

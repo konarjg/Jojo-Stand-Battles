@@ -1,30 +1,36 @@
-﻿using ExitGames.Client.Photon;
-using Photon.Pun;
-using Photon.Realtime;
+﻿using Photon;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class EventHandler : MonoBehaviour, IOnEventCallback
+using MonoBehaviour = Photon.MonoBehaviour;
+
+namespace Jojo
 {
-    public void OnEvent(EventData data)
+    public class EventHandler : MonoBehaviour
     {
-        for (int i = 0; i < Events.Count; ++i)
+        public void OnEvent(byte code, object content, int senderId)
         {
-            if (data.Code == i)
+            for (int i = 0; i < Events.Count; ++i)
             {
-                Events.GetEvent(i).OnEvent();
-                return;
+                if (code == Events.GetEvent(i).GetID())
+                {
+                    var _event = Events.GetEvent(i);
+                    var type = _event.GetType();
+
+                    type.GetMethod("OnEvent").Invoke(_event, (object[])content);
+                    return;
+                }
             }
         }
-    }
 
-    private void OnEnable()
-    {
-        PhotonNetwork.AddCallbackTarget(this);
-    }
+        public void OnEnable()
+        {
+            PhotonNetwork.OnEventCall += OnEvent;
+        }
 
-    private void OnDisable()
-    {
-        PhotonNetwork.RemoveCallbackTarget(this);
+        public void OnDisable()
+        {
+            PhotonNetwork.OnEventCall -= OnEvent;
+        }
     }
 }
