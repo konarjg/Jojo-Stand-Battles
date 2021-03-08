@@ -10,9 +10,7 @@ namespace Jojo
         private static List<Event> EventList = new List<Event>();
 
         #region Events
-        public static Event OnDraftStartedEvent = new OnDraftStartedEvent(1);
-        public static Event OnDraftPhaseChangedEvent = new OnDraftPhaseChangedEvent(2);
-        public static Event OnGameStartedEvent = new OnGameStartedEvent(2);
+
         #endregion
 
         public static int Count

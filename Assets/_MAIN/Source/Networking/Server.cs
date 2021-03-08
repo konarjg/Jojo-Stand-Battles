@@ -9,8 +9,13 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 [RequireComponent(typeof(PhotonView), typeof(EventHandler))]
 public class Server : MonoBehaviour
 {
+    [SerializeField]
+    [Range(2, 4)]
+    private int MaxPlayers = 2;
+
     private void Start()
     {
+        DontDestroyOnLoad(gameObject);
         PhotonNetwork.ConnectUsingSettings("1.0");
         PhotonNetwork.player.NickName = Random.Range(0, int.MaxValue).ToString();
     }
@@ -48,10 +53,7 @@ public class Server : MonoBehaviour
     public void OnPhotonPlayerConnected(PhotonPlayer player)
     {
         if (PhotonNetwork.isMasterClient)
-        {
-            Events.OnDraftStartedEvent.Call();
             photonView.RPC("PlayerConnectedRPC", PhotonTargets.AllBuffered, player);
-        }
     }
 
     public void OnPhotonPlayerDisconnected(PhotonPlayer player)

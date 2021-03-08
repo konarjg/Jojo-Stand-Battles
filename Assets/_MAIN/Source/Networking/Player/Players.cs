@@ -6,6 +6,14 @@ public static class Players
 {
     private static List<Player> PlayerList = new List<Player>();
 
+    public static int Count
+    {
+        get
+        {
+            return PlayerList.Count;
+        }
+    }
+
     public static void Add(Player player)
     {
         PlayerList.Add(player);

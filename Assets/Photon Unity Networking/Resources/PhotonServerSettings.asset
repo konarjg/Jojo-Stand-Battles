@@ -32,11 +32,11 @@ MonoBehaviour:
   - DestroyRpc
   - InstantiateRpc
   - PickupItemInit
+  - PlayerConnectedRPC
+  - PlayerDisconnectedRPC
   - PunPickup
   - PunPickupSimple
   - PunRespawn
   - RequestForPickupItems
   - RequestForPickupTimes
-  - PlayerConnectedRPC
-  - PlayerDisconnectedRPC
   DisableAutoOpenWizard: 1
