@@ -26,6 +26,8 @@ public class Server : MonoBehaviour
 
     public delegate void UpdateSearchTime(float time);
     public static UpdateSearchTime OnSearchTimeUpdatedEvent;
+    public delegate void GameFound();
+    public static GameFound OnGameFoundEvent;
 
     private void Start()
     {
@@ -67,12 +69,13 @@ public class Server : MonoBehaviour
         {
             SearchTime += Time.deltaTime;
             OnSearchTimeUpdatedEvent?.Invoke(SearchTime);
-        }
-    }
 
-    public void OnJoinedLobby()
-    {
-        Menu.Enable();
+            if (Players.Count == MaxPlayers)
+            {
+                OnGameFoundEvent?.Invoke();
+                Searching = false;
+            }
+        }
     }
 
     public void QuickMatch()
@@ -95,16 +98,14 @@ public class Server : MonoBehaviour
         PhotonNetwork.CreateRoom("", options, null);
     }
 
-    public void OnCreatedRoom()
+    public void OnJoinedLobby()
     {
-        if (PhotonNetwork.isMasterClient)
-            photonView.RPC("PlayerConnectedRPC", PhotonTargets.AllBuffered, PhotonNetwork.player);
+        Menu.Enable();
     }
 
-    public void OnPhotonPlayerConnected(PhotonPlayer player)
+    public void OnJoinedRoom()
     {
-        if (PhotonNetwork.isMasterClient)
-            photonView.RPC("PlayerConnectedRPC", PhotonTargets.AllBuffered, player);
+        photonView.RPC("PlayerConnectedRPC", PhotonTargets.AllBufferedViaServer, PhotonNetwork.player);
     }
 
     public void OnPhotonPlayerDisconnected(PhotonPlayer player)
@@ -112,7 +113,7 @@ public class Server : MonoBehaviour
         if (PhotonNetwork.isMasterClient)
         {
             PhotonNetwork.RemoveRPCs(player);
-            photonView.RPC("PlayerDisconnectedRPC", PhotonTargets.All, player);
+            photonView.RPC("PlayerDisconnectedRPC", PhotonTargets.AllViaServer, player);
         }
     }
 

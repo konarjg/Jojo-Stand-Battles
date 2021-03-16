@@ -10,6 +10,7 @@ public class Menu : MonoBehaviour
     private GameObject[] MainMenu;
     private GameObject[] MatchmakingMenu;
     private GameObject[] SearchingMenu;
+    private GameObject[] AcceptMenu;
 
     private static Server Server;
 
@@ -74,6 +75,15 @@ public class Menu : MonoBehaviour
             SearchingMenu[i] = searching.GetChild(i).gameObject;
             SearchingMenu[i].SetActive(false);
         }
+
+        var accept = GameObject.Find("Accept").transform;
+        AcceptMenu = new GameObject[accept.childCount];
+
+        for (int i = 0; i < accept.childCount; ++i)
+        {
+            AcceptMenu[i] = accept.GetChild(i).gameObject;
+            AcceptMenu[i].SetActive(false);
+        }
     }
 
     public void Enable()
@@ -130,6 +140,11 @@ public class Menu : MonoBehaviour
         string secondsString = "" + (seconds < 10 ? "0" + seconds : "" + seconds);
 
         text.text = string.Format("{0}:{1}", minutesString, secondsString);
+    }
+
+    public void GameFound()
+    {
+        DisplayMenu("AcceptMenu");
     }
 
     #endregion
