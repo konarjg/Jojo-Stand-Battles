@@ -17,11 +17,13 @@ public class Menu : MonoBehaviour
     private void OnEnable()
     {
         Server.OnSearchTimeUpdatedEvent += UpdateSearchTime;
+        Server.OnGameFoundEvent += GameFound;
     }
 
     private void OnDisable()
     {
         Server.OnSearchTimeUpdatedEvent -= UpdateSearchTime;
+        Server.OnGameFoundEvent -= GameFound;
     }
 
     private void DisplayMenu(string name)
